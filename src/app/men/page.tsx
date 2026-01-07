@@ -1,6 +1,6 @@
 "use client";
 
-import { useShop } from "@/context/ShopContext";
+import { useShop } from "@/context/ShopContext"; 
 import ProductCard from "@/components/ProductCard";
 
 export default function MenPage() {

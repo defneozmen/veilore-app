@@ -3,58 +3,76 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Product } from "@/types";
 
-// Context içinde nelerin olacağını tanımlıyoruz
 interface ShopContextType {
   products: Product[];
   cart: Product[];
   addNewProduct: (product: Product) => void;
-  deleteProduct: (id: string) => void;
+  removeProduct: (id: string) => void; // Mağazadan siler
   addToCart: (product: Product) => void;
+  removeFromCart: (productId: string) => void; // Sepetten siler (YENİ)
+  cartTotal: number;
 }
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export function ShopProvider({ children }: { children: ReactNode }) {
-  // Ürünler Listesi
   const [products, setProducts] = useState<Product[]>([]);
-  // Sepet Listesi
   const [cart, setCart] = useState<Product[]>([]);
 
-  // Sayfa yüklendiğinde LocalStorage'dan ürünleri çek
+  // 1. Verileri LocalStorage'dan Çek
   useEffect(() => {
     const storedProducts = localStorage.getItem("products");
-    if (storedProducts) {
-      try {
-        setProducts(JSON.parse(storedProducts));
-      } catch (error) {
-        console.error("Veri okuma hatası:", error);
-        setProducts([]); // Hata olursa boş dizi ata
-      }
-    }
+    const storedCart = localStorage.getItem("cart");
+    
+    if (storedProducts) setProducts(JSON.parse(storedProducts));
+    if (storedCart) setCart(JSON.parse(storedCart));
   }, []);
+
+  // 2. Sepet Değişince LocalStorage'a Kaydet
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   // --- FONKSİYONLAR ---
 
-  // 1. Yeni Ürün Ekle
+  // Ürün Ekle (Admin)
   const addNewProduct = (product: Product) => {
-    const updatedProducts = [...products, product];
-    setProducts(updatedProducts);
-    localStorage.setItem("products", JSON.stringify(updatedProducts));
+    const updated = [...products, product];
+    setProducts(updated);
+    localStorage.setItem("products", JSON.stringify(updated));
   };
 
-  // 2. Ürün Sil (ProductCard için gerekli)
-  const deleteProduct = (id: string) => {
-    const updatedProducts = products.filter((p) => p.productId !== id);
-    setProducts(updatedProducts);
-    localStorage.setItem("products", JSON.stringify(updatedProducts));
+  // Ürün Sil (Admin)
+  const removeProduct = (id: string) => {
+    const updated = products.filter((p) => p.productId !== id);
+    setProducts(updated);
+    localStorage.setItem("products", JSON.stringify(updated));
   };
 
-  // 3. Sepete Ekle (ProductCard için gerekli)
+  // Sepete Ekle
   const addToCart = (product: Product) => {
-    setCart((prevCart) => [...prevCart, product]);
-    // İstersen sepeti de localstorage'a kaydedebilirsin
-    console.log(`${product.productName} sepete eklendi.`);
+    // Aynı ürün tekrar eklenmesin (İstersen bu kontrolü kaldırabilirsin)
+    const exists = cart.find(item => item.productId === product.productId);
+    if (exists) {
+      alert("Bu ürün zaten sepetinizde var!");
+      return;
+    }
+    setCart((prev) => [...prev, product]);
   };
+
+  // --- (YENİ) SEPETTEN SİLME FONKSİYONU ---
+  const removeFromCart = (productId: string) => {
+    setCart((prevCart) => {
+      const updatedCart = prevCart.filter((item) => item.productId !== productId);
+      return updatedCart;
+    });
+  };
+
+  // Sepet Toplam Tutarı
+  const cartTotal = cart.reduce((total, item) => {
+    const price = item.discountPrice || item.price;
+    return total + price;
+  }, 0);
 
   return (
     <ShopContext.Provider 
@@ -62,8 +80,10 @@ export function ShopProvider({ children }: { children: ReactNode }) {
         products, 
         cart, 
         addNewProduct, 
-        deleteProduct, 
-        addToCart 
+        removeProduct, 
+        addToCart,
+        removeFromCart, // <-- Artık dışarıya aktarılıyor
+        cartTotal
       }}
     >
       {children}
@@ -73,8 +93,6 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 
 export function useShop() {
   const context = useContext(ShopContext);
-  if (!context) {
-    throw new Error("useShop must be used within a ShopProvider");
-  }
+  if (!context) throw new Error("useShop must be used within a ShopProvider");
   return context;
 }

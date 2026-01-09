@@ -20,13 +20,13 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   { 
     id: 1, 
-    name: "Selin Yılmaz", 
+    name: "Nisa Elsan", 
     role: "Baş Parfümör (The Nose)", 
     description: "Grasse, Fransa'da koku eğitimi aldı. İmza parfümlerimizin yaratıcısı." 
   },
   { 
     id: 2, 
-    name: "Emre Can", 
+    name: "Alperen Burak Küçük", 
     role: "Kimya Mühendisi & Esans Uzmanı", 
     description: "Kokuların kalıcılığını ve notaların uyumunu formüle eden bilim insanı." 
   },
@@ -67,7 +67,7 @@ export default function AboutPage() {
 
         <div className="container position-relative z-1">
           <span className="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill mb-4 tracking-wider fw-bold text-uppercase text-dark">
-            Est. 2023 • İstanbul
+            Est. 2026 • İstanbul
           </span>
           <h1 className="display-3 fw-bold mb-4 text-dark" style={{ letterSpacing: "-1px" }}>
             Bir Parfümden <br />
@@ -202,7 +202,7 @@ export default function AboutPage() {
                       background: "linear-gradient(135deg, #d97706, #fbbf24)",
                     }}
                   >
-                    {member.name.substring(0,2).toUpperCase()}
+                    {member.name.substring(0,1).toUpperCase()}
                   </div>
                   <h4 className="fw-bold mb-1">{member.name}</h4>
                   <span className="badge bg-dark text-white mb-3 d-inline-block mx-auto">{member.role}</span>

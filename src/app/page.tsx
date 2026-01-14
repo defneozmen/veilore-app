@@ -1,156 +1,88 @@
 "use client";
 
 import Link from "next/link";
-import { CSSProperties } from "react";
+import { useShop } from "@/context/ShopContext";
+import ProductCard from "@/components/ProductCard";
 
-/**
- * The main landing page component for the Veilore e-commerce application.
- * It serves as the entry point, featuring a prominent hero section with glassmorphism aesthetic,
- * direct navigation links to primary product categories (Men/Women), and a section highlighting brand values.
- *
- * @component
- * @returns {JSX.Element} The rendered homepage.
- */
 export default function Home() {
-  
-  /**
-   * Base styles for the main container to establish the premium feel background.
-   * Uses a subtle radial gradient blending cool and warm tones.
-   */
-  const pageWrapperStyle: CSSProperties = {
-    background: "radial-gradient(circle at top center, #f8fafc, #fff1f2)",
-    minHeight: "100vh",
-  };
-
-  /**
-   * Inline styles for the decorative blurred shapes in the background.
-   * These add depth to the glassmorphism effect in the hero section.
-   */
-  const blobStyle: CSSProperties = {
-    position: "absolute",
-    borderRadius: "50%",
-    filter: "blur(90px)",
-    zIndex: 0,
-    opacity: 0.4
-  };
+  const { products } = useShop();
+  const recentProducts = [...products].reverse().slice(0, 4);
 
   return (
-    <main style={pageWrapperStyle} className="position-relative overflow-hidden">
+    <main className="position-relative min-vh-100">
       
-      {/* --- HERO SECTION --- */}
-      <section className="d-flex flex-column justify-content-center align-items-center px-4 py-5 min-vh-75 position-relative">
-        
-        {/* Decorative Background Blobs */}
-        <div style={{ ...blobStyle, top: "-10%", left: "-5%", width: "500px", height: "500px", background: "linear-gradient(135deg, #bfdbfe, #3b82f6)" }} />
-        <div style={{ ...blobStyle, bottom: "-10%", right: "-5%", width: "400px", height: "400px", background: "linear-gradient(135deg, #fbcfe8, #db2777)" }} />
+      {/* 1. TÜM SAYFAYI KAPLAYAN SABİT ARKA PLAN */}
+      <div 
+        className="position-fixed top-0 start-0 w-100 h-100"
+        style={{ 
+          backgroundImage: "url('https://images.unsplash.com/photo-1615634260167-c8cdede054de?q=80&w=1600&auto=format&fit=crop')", 
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          zIndex: -1 // Her şeyin arkasında kalması için
+        }}
+      >
+        {/* Tüm sayfayı kapsayan hafif bir karartma (İçeriklerin okunması için) */}
+        <div className="w-100 h-100" style={{ background: "rgba(0,0,0,0.4)" }}></div>
+      </div>
 
-        {/* Main Glassmorphism Content Box */}
-        <div 
-          className="p-5 rounded-5 shadow-lg text-center position-relative z-1 mx-auto"
-          style={{
-            maxWidth: "900px",
-            width: "100%",
-            background: "rgba(255, 255, 255, 0.7)", // High transparency for glass effect
-            backdropFilter: "blur(25px)", // Strong blur for realism
-            border: "1px solid rgba(255, 255, 255, 0.5)",
-          }}
-        >
-          <span className="d-inline-block py-1 px-3 mb-4 rounded-pill bg-white text-primary fw-bold small tracking-wider shadow-sm">
-            Yeni Sezon Yayında
-          </span>
-          
-          <h1 className="display-3 fw-bold mb-4 text-dark lh-1">
-            Kendi Tarzını <br />
-            <span className="text-transparent bg-clip-text" style={{ backgroundImage: "linear-gradient(to right, #2563eb, #db2777)" }}>
-              Veilore
-            </span> İle Yarat.
-          </h1>
-          
-          <p className="lead text-muted mb-5 mx-auto" style={{ maxWidth: "650px" }}>
-            Modern çizgiler, premium kumaşlar ve zamansız tasarımlar. 
-            Sizi yansıtan o mükemmel parçayı bulmak için koleksiyonları keşfedin.
+      {/* 2. GİRİŞ (HERO) ALANI */}
+      <section className="d-flex align-items-center justify-content-center text-center text-white" style={{ height: "100vh" }}>
+        <div className="p-4">
+          <span className="text-uppercase tracking-wider small fw-bold mb-3 d-block" style={{ letterSpacing: "8px", opacity: 0.8 }}>LÜKS & ZARAFET</span>
+          <h1 className="display-1 fw-bolder mb-4">İmza Kokunu Keşfet</h1>
+          <p className="lead mb-5 mx-auto opacity-75" style={{ maxWidth: "700px" }}>
+            Büyüleyici notalar ve kalıcı esanslarla dolu eşsiz parfüm koleksiyonumuzla tarzınızı tamamlayın.
           </p>
-
-          <div className="d-flex gap-3 justify-content-center flex-wrap">
-            <Link href="/men" className="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-semibold hover-scale">
-              Erkek Koleksiyonu
-            </Link>
-            <Link href="/women" className="btn btn-light text-dark border btn-lg rounded-pill px-5 py-3 fw-semibold hover-scale">
-              Kadın Koleksiyonu
-            </Link>
+          <div className="d-flex gap-4 justify-content-center">
+            <Link href="/women" className="btn btn-light rounded-pill px-5 py-3 fw-bold border-0">KADIN KOLEKSİYONU</Link>
+            <Link href="/men" className="btn btn-outline-light rounded-pill px-5 py-3 fw-bold">ERKEK KOLEKSİYONU</Link>
           </div>
         </div>
       </section>
 
-      {/* --- CATEGORY SPOTLIGHT SECTION --- */}
-      <section className="container py-5 position-relative z-1">
-        <div className="row g-4">
-          {/* Men's Category Card */}
-          <div className="col-lg-6">
-            <Link href="/men" className="text-decoration-none">
-              <div 
-                className="card h-100 border-0 rounded-5 overflow-hidden text-white shadow hover-scale"
-                style={{ 
-                  minHeight: "350px",
-                  background: "linear-gradient(160deg, #0f172a 0%, #1e40af 100%)" // Deep blue gradient
-                }}
-              >
-                <div className="card-body p-5 d-flex flex-column justify-content-end align-items-start">
-                  <h2 className="display-6 fw-bold mb-2">Erkek</h2>
-                  <p className="text-white-50 mb-4">Güçlü, modern ve sofistike duruş.</p>
-                  <span className="btn btn-sm btn-outline-light rounded-pill px-4 stretched-link">İncele &rarr;</span>
-                </div>
+      {/* 3. AVANTAJLAR (Şeffaf ve Cam Efektli) */}
+      <section className="py-5" style={{ background: "rgba(255,255,255,0.05)", backdropFilter: "blur(10px)" }}>
+        <div className="container py-4">
+          <div className="row text-center text-white g-4">
+            <div className="col-md-3">✨ <h6 className="mt-2 fw-bold small ls-2">ORİJİNAL ÜRÜN</h6></div>
+            <div className="col-md-3">🚚 <h6 className="mt-2 fw-bold small ls-2">HIZLI KARGO</h6></div>
+            <div className="col-md-3">🎁 <h6 className="mt-2 fw-bold small ls-2">ÖZEL PAKETLEME</h6></div>
+            <div className="col-md-3">🛡️ <h6 className="mt-2 fw-bold small ls-2">GÜVENLİ ÖDEME</h6></div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. VİTRİN KOLEKSİYONU (Buzlu Cam Paneli Üzerinde) */}
+      <section className="py-5">
+        <div className="container py-5 my-5" style={{ 
+          background: "rgba(255,255,255,0.1)", 
+          backdropFilter: "blur(20px)",
+          borderRadius: "40px",
+          border: "1px solid rgba(255,255,255,0.1)",
+          padding: "50px"
+        }}>
+          <div className="text-center mb-5">
+            <h2 className="fw-bold display-5 text-white">Vitrin Koleksiyonu</h2>
+            <div className="mx-auto bg-white mt-3" style={{ width: "60px", height: "2px", opacity: 0.5 }}></div>
+          </div>
+
+          <div className="row g-4">
+            {recentProducts.map((product) => (
+              <div key={product.productId} className="col-md-3">
+                <ProductCard product={product} />
               </div>
-            </Link>
+            ))}
           </div>
-
-          {/* Women's Category Card */}
-          <div className="col-lg-6">
-            <Link href="/women" className="text-decoration-none">
-              <div 
-                className="card h-100 border-0 rounded-5 overflow-hidden text-white shadow hover-scale"
-                style={{ 
-                  minHeight: "350px",
-                  background: "linear-gradient(160deg, #831843 0%, #be185d 100%)" // Deep rose gradient
-                }}
-              >
-                <div className="card-body p-5 d-flex flex-column justify-content-end align-items-start">
-                  <h2 className="display-6 fw-bold mb-2">Kadın</h2>
-                  <p className="text-white-50 mb-4">Zarif detaylar, feminen ve estetik çizgiler.</p>
-                  <span className="btn btn-sm btn-outline-light rounded-pill px-4 stretched-link">İncele &rarr;</span>
-                </div>
-              </div>
-            </Link>
+          
+          <div className="text-center mt-5">
+            <Link href="/women" className="btn btn-outline-light rounded-pill px-5 py-2">Tümünü Gör</Link>
           </div>
         </div>
       </section>
 
-      {/* --- FEATURES / VALUE PROPOSITION SECTION --- */}
-      <section className="container py-5 mb-5 position-relative z-1">
-        <div className="row g-4 text-center py-4 rounded-4 bg-white shadow-sm border">
-          <div className="col-md-4">
-            <div className="p-3">
-              <div className="fs-1 mb-3">💎</div>
-              <h5 className="fw-bold">Premium Kalite</h5>
-              <p className="text-muted small mb-0">En iyi kumaşlar ve ustalıkla işlenmiş detaylar.</p>
-            </div>
-          </div>
-          <div className="col-md-4 border-start border-end">
-            <div className="p-3">
-              <div className="fs-1 mb-3">🚀</div>
-              <h5 className="fw-bold">Hızlı & Güvenli Kargo</h5>
-              <p className="text-muted small mb-0">Siparişleriniz özenle paketlenir ve hızla ulaştırılır.</p>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="p-3">
-              <div className="fs-1 mb-3">🛡️</div>
-              <h5 className="fw-bold">Güvenli Ödeme</h5>
-              <p className="text-muted small mb-0">256-bit SSL sertifikası ile korunan güvenli altyapı.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <footer className="py-5 text-center text-white-50 small">
+        © 2026 VEILORA. Tüm Hakları Saklıdır.
+      </footer>
     </main>
   );
 }

@@ -44,10 +44,10 @@ export default function Home() {
       <section className="py-5" style={{ background: "rgba(255,255,255,0.05)", backdropFilter: "blur(10px)" }}>
         <div className="container py-4">
           <div className="row text-center text-white g-4">
-            <div className="col-md-3">✨ <h6 className="mt-2 fw-bold small ls-2">ORİJİNAL ÜRÜN</h6></div>
-            <div className="col-md-3">🚚 <h6 className="mt-2 fw-bold small ls-2">HIZLI KARGO</h6></div>
-            <div className="col-md-3">🎁 <h6 className="mt-2 fw-bold small ls-2">ÖZEL PAKETLEME</h6></div>
-            <div className="col-md-3">🛡️ <h6 className="mt-2 fw-bold small ls-2">GÜVENLİ ÖDEME</h6></div>
+            <div className="col-md-3"> <h6 className="mt-2 fw-bold small ls-2">ORİJİNAL ÜRÜN</h6></div>
+            <div className="col-md-3"> <h6 className="mt-2 fw-bold small ls-2">HIZLI KARGO</h6></div>
+            <div className="col-md-3"> <h6 className="mt-2 fw-bold small ls-2">ÖZEL PAKETLEME</h6></div>
+            <div className="col-md-3"> <h6 className="mt-2 fw-bold small ls-2">GÜVENLİ ÖDEME</h6></div>
           </div>
         </div>
       </section>

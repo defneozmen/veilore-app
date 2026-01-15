@@ -57,7 +57,7 @@ export default function CartPage() {
                         onClick={() => removeFromCart(item.productId)}
                         className="btn btn-sm btn-outline-danger border-0"
                       >
-                        🗑️ Kaldır
+                         Kaldır
                       </button>
                     </div>
                   </div>
